@@ -19,8 +19,11 @@ module MyStoryBookletCompanionV2
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins "*"
-        resource "*", headers: :any, methods: [:get, :post, :options]
+        resource "*", headers: :any, methods: [:get, :post, :put, :patch, :delete, :options]
       end
     end
+
+    config.active_job.queue_adapter = :sidekiq
+    config.eager_load_paths << Rails.root.join("workers")
   end
 end
