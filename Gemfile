@@ -46,7 +46,6 @@ group :development do
   gem "binding_of_caller"
   gem "bullet"
   gem "guard-rails"
-  gem "guard-shell"
   gem "guard-bundler"
   gem "terminal-notifier-guard"
   gem "mailcatcher", require: false

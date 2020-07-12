@@ -1,0 +1,1 @@
+do shell script "curl localhost:3001/new-pdf-alert/"

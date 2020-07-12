@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_07_135947) do
+ActiveRecord::Schema.define(version: 2020_07_11_065921) do
 
   create_table "publications", force: :cascade do |t|
     t.string "publication_number"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_135947) do
     t.string "publication_filename"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "pdf_generated", default: false, null: false
   end
 
 end
