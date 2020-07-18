@@ -22,7 +22,7 @@ class PublicationsController < ApplicationController
 
       if publication && !publication.pdf_generated
         publication.update(pdf_generated: true)
-        PostPDFPublicationWorker.perform_async(publication.id, file)
+        PostPdfToCoreJob.perform_later(publication.id, file)
       end
     end
 
@@ -35,6 +35,7 @@ class PublicationsController < ApplicationController
     params.require(:publication).permit(:publication_number, :publication_url, :publication_filename, :publication_status)
   end
 
+  # the filename and strip everything until you are left with just the publication number
   def extract_publication_number_from(file)
     file = file.gsub(/^.*\/Out\/.\d*-\d*-\d*-\d*-\d*-\d*-/, "").gsub(/-mystorybooklet-english.pdf/, "")
   end

@@ -1,0 +1,7 @@
+:verbose: false
+:timeout: 25
+:max_retries: 5
+:queues:
+  - default
+  - post_pdf_to_core
+  - download_idml

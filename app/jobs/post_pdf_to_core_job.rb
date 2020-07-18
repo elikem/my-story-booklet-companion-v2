@@ -1,7 +1,6 @@
-class PostPDFPublicationWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: "post_pdf_publications"
-
+class PostPdfToCoreJob < ApplicationJob
+  queue_as :post_pdf_to_core
+  
   def perform(publication_id, pdf_filepath)
     # POST w/ HTTParty using both the publication_number, pdf_filepath
     # POST pdf binary file, not pdf filepath as a string
@@ -10,10 +9,10 @@ class PostPDFPublicationWorker
 
     response = HTTParty.post(
       post_pdf_publication_endpoint,
-      query: {
+      body: {
         publication: {
           publication_number: @publication.publication_number,
-          pdf_file: File.open(pdf_filepath),
+          pdf_file: File.read(pdf_filepath),
         },
       },
     )

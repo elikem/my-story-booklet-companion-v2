@@ -1,6 +1,5 @@
-class DownloadIDMLWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: "download_idmls"
+class DownloadIdmlJob < ApplicationJob
+  queue_as :download_idml
 
   def perform(publication_url, publication_filename)
     File.open("#{Rails.root}/storage/#{publication_filename}", "wb") do |file|
