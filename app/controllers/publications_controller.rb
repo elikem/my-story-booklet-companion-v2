@@ -2,7 +2,7 @@ class PublicationsController < ApplicationController
   protect_from_forgery :except => [:create_idml_publication]
 
   # download a single idml publication
-  def create_idml_publication
+  def download_idml_publication
     @publication = Publication.new(publication_params)
 
     unless @publication.save
@@ -12,21 +12,25 @@ class PublicationsController < ApplicationController
 
   # trigger informing companion app of a newly generated PDF file
   def new_pdf_alert
-    # TODO: Call background worker to:
-    # search for new files
-    # update the pdf_generated column
-    # and then POST the PDF to the core app -> use Publication#post_pdf_to_core_app.
-    Dir.glob("#{Rails.root}/storage/Out/*.pdf").each do |file|
-      publication_number = extract_publication_number_from(file)
+    # search for new files by looking for where a publication exists and a pdf_generated hasn't been generated.
+    # when a new file is found, update the pdf_generated and pdf_filename column.
+    Dir.glob("#{Rails.root}/storage/Out/*.pdf").each do |filename|
+      publication_number = extract_publication_number_from(filename)
       publication = Publication.find_by_publication_number(publication_number)
 
       if publication && !publication.pdf_generated
-        publication.update(pdf_generated: true)
-        PostPdfToCoreJob.perform_later(publication.id, file)
+        publication.update(pdf_generated: true, pdf_filename: filename, pdf_url: "#{CONFIG["companion_app_domain"]}/publications/#{publication.id}/pdf")
+        PostPdfUrlToCoreJob.perform_later(publication.id)
       end
     end
 
     head :ok
+  end
+
+  # download link for pdf file to be consumed by the core app
+  def show_pdf
+    @publication = Publication.find(params[:id])
+    send_file("#{@publication.pdf_filename}", type: "application/pdf", disposition: "attachment", stream: true, status: 200)
   end
 
   private

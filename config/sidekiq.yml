@@ -3,5 +3,5 @@
 :max_retries: 5
 :queues:
   - default
-  - post_pdf_to_core
+  - post_pdf_url_to_core 
   - download_idml
