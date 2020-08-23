@@ -4,7 +4,7 @@ class PostPdfUrlToCoreJob < ApplicationJob
   def perform(publication_id)
     # POST w/ HTTParty using both the publication_number, pdf_url
     @publication = Publication.find(publication_id)
-    post_pdf_publication_endpoint = "#{CONFIG["core_app_url"]}/publications/publish-pdf"
+    post_pdf_publication_endpoint = "#{ENV["CORE_APP_URL"]}/publications/publish-pdf"
 
     response = HTTParty.post(
       post_pdf_publication_endpoint,

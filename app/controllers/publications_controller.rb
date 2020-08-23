@@ -19,7 +19,7 @@ class PublicationsController < ApplicationController
       publication = Publication.find_by_publication_number(publication_number)
 
       if publication && !publication.pdf_generated
-        publication.update(pdf_generated: true, pdf_filename: filename, pdf_url: "#{CONFIG["companion_app_url"]}/publications/#{publication.id}/pdf")
+        publication.update(pdf_generated: true, pdf_filename: filename, pdf_url: "#{ENV["COMPANION_APP_URL"]}/publications/#{publication.id}/pdf")
         PostPdfUrlToCoreJob.perform_later(publication.id)
       end
     end

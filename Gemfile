@@ -28,6 +28,7 @@ gem "loofah"
 gem "httparty"
 gem "sidekiq"
 gem 'rack-cors'
+gem "figaro"
 
 group :development do
   gem "pry-rails"
